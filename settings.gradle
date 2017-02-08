@@ -1,0 +1,3 @@
+rootProject.name = 'backgammon'
+include 'backgammon-model'
+
