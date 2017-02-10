@@ -2,6 +2,7 @@ package se.molybden.games.backgammon.model
 
 import org.junit.Test
 import se.molybden.games.backgammon.model.exceptions.IllegalMoveException
+import se.molybden.games.backgammon.model.exceptions.WinnerFoundException
 import spock.lang.Specification
 
 import static se.molybden.games.backgammon.model.BarPosition.getBarPosition
@@ -13,30 +14,30 @@ import static se.molybden.games.backgammon.model.Color.WHITE
  * Created by joachim on 2017-02-08.
  */
 class BoardTest extends Specification {
+	final static String INIT_STATE = """\
+	   v  v  v  v  v  v     v  v  v  v  v  v
+	*--------------------*--------------------*
+	|  W              B  |     B           W  |
+	|  W              B  |     B           W  |
+	|                 B  |     B           W  |
+	|                 B  |                 W  |
+	|                 B  |                 W  |
+	|                    |                    |  W: 0
+	|                    |                    |  B: 0
+	|                 W  |                 B  |
+	|                 W  |                 B  |
+	|                 W  |     W           B  |
+	|  B              W  |     W           B  |
+	|  B              W  |     W           B  |
+	*--------------------*--------------------*
+	   ^  ^  ^  ^  ^  ^     ^  ^  ^  ^  ^  ^"""
 
 	@Test
 	void "Should be able to make some moves"() {
 		given:
-		String initState = """\
-		   v  v  v  v  v  v     v  v  v  v  v  v
-		*--------------------*--------------------*
-		|  W              B  |     B           W  |
-		|  W              B  |     B           W  |
-		|                 B  |     B           W  |
-		|                 B  |                 W  |
-		|                 B  |                 W  |
-		|                    |                    |  W: 0
-		|                    |                    |  B: 0
-		|                 W  |                 B  |
-		|                 W  |                 B  |
-		|                 W  |     W           B  |
-		|  B              W  |     W           B  |
-		|  B              W  |     W           B  |
-		*--------------------*--------------------*
-		   ^  ^  ^  ^  ^  ^     ^  ^  ^  ^  ^  ^"""
 		when:
 		def board = new Board()
-		verifyState(initState, board)
+		verifyState(INIT_STATE, board)
 
 		String afterFirstMove = """\
 		   v  v  v  v  v  v     v  v  v  v  v  v
@@ -129,24 +130,7 @@ class BoardTest extends Specification {
 		board.move(new BoardPosition(BLACK, 1), new BoardPosition(BLACK, 6))
 		then:
 		thrown IllegalMoveException
-		String expectedState = """\
-		   v  v  v  v  v  v     v  v  v  v  v  v
-		*--------------------*--------------------*
-		|  W              B  |     B           W  |
-		|  W              B  |     B           W  |
-		|                 B  |     B           W  |
-		|                 B  |                 W  |
-		|                 B  |                 W  |
-		|                    |                    |  W: 0
-		|                    |                    |  B: 0
-		|                 W  |                 B  |
-		|                 W  |                 B  |
-		|                 W  |     W           B  |
-		|  B              W  |     W           B  |
-		|  B              W  |     W           B  |
-		*--------------------*--------------------*
-		   ^  ^  ^  ^  ^  ^     ^  ^  ^  ^  ^  ^"""
-		verifyState(expectedState, board)
+		verifyState(INIT_STATE, board)
 	}
 
 	@Test
@@ -157,24 +141,7 @@ class BoardTest extends Specification {
 		board.move(new BoardPosition(BLACK, 1), new BoardPosition(BLACK, 11))
 		then:
 		thrown IllegalMoveException
-		String expectedState = """\
-		   v  v  v  v  v  v     v  v  v  v  v  v
-		*--------------------*--------------------*
-		|  W              B  |     B           W  |
-		|  W              B  |     B           W  |
-		|                 B  |     B           W  |
-		|                 B  |                 W  |
-		|                 B  |                 W  |
-		|                    |                    |  W: 0
-		|                    |                    |  B: 0
-		|                 W  |                 B  |
-		|                 W  |                 B  |
-		|                 W  |     W           B  |
-		|  B              W  |     W           B  |
-		|  B              W  |     W           B  |
-		*--------------------*--------------------*
-		   ^  ^  ^  ^  ^  ^     ^  ^  ^  ^  ^  ^"""
-		verifyState(expectedState, board)
+		verifyState(INIT_STATE, board)
 	}
 
 	@Test
@@ -186,24 +153,7 @@ class BoardTest extends Specification {
 		then:
 		IllegalMoveException e = thrown()
 		e.message.contains("Cannot bear off from")
-		String expectedState = """\
-		   v  v  v  v  v  v     v  v  v  v  v  v
-		*--------------------*--------------------*
-		|  W              B  |     B           W  |
-		|  W              B  |     B           W  |
-		|                 B  |     B           W  |
-		|                 B  |                 W  |
-		|                 B  |                 W  |
-		|                    |                    |  W: 0
-		|                    |                    |  B: 0
-		|                 W  |                 B  |
-		|                 W  |                 B  |
-		|                 W  |     W           B  |
-		|  B              W  |     W           B  |
-		|  B              W  |     W           B  |
-		*--------------------*--------------------*
-		   ^  ^  ^  ^  ^  ^     ^  ^  ^  ^  ^  ^"""
-		verifyState(expectedState, board)
+		verifyState(INIT_STATE, board)
 	}
 
 	@Test
@@ -215,24 +165,7 @@ class BoardTest extends Specification {
 		then:
 		IllegalMoveException e = thrown()
 		e.message.contains("home board")
-		String expectedState = """\
-		   v  v  v  v  v  v     v  v  v  v  v  v
-		*--------------------*--------------------*
-		|  W              B  |     B           W  |
-		|  W              B  |     B           W  |
-		|                 B  |     B           W  |
-		|                 B  |                 W  |
-		|                 B  |                 W  |
-		|                    |                    |  W: 0
-		|                    |                    |  B: 0
-		|                 W  |                 B  |
-		|                 W  |                 B  |
-		|                 W  |     W           B  |
-		|  B              W  |     W           B  |
-		|  B              W  |     W           B  |
-		*--------------------*--------------------*
-		   ^  ^  ^  ^  ^  ^     ^  ^  ^  ^  ^  ^"""
-		verifyState(expectedState, board)
+		verifyState(INIT_STATE, board)
 	}
 
 	@Test
@@ -241,6 +174,7 @@ class BoardTest extends Specification {
 		def board = new Board()
 		board.move(new BoardPosition(BLACK, 1), new BoardPosition(BLACK, 3))
 		board.move(new BoardPosition(WHITE, 19), new BoardPosition(WHITE, 22))
+		board.confirmState()
 		when:
 		board.move(new BoardPosition(BLACK, 1), new BoardPosition(BLACK, 3))
 		then:
@@ -340,14 +274,75 @@ class BoardTest extends Specification {
 		verifyState(expectedState, board)
 	}
 
+	@Test
+	void "Move all checkers off board, declare winner"() {
+		given:
+		def board = new Board()
+		board.move(new BoardPosition(BLACK, 1), new BoardPosition(BLACK, 7))
+		board.move(new BoardPosition(BLACK, 1), new BoardPosition(BLACK, 7))
+		board.move(new BoardPosition(BLACK, 7), new BoardPosition(BLACK, 12))
+		board.move(new BoardPosition(BLACK, 7), new BoardPosition(BLACK, 12))
+		board.move(new BoardPosition(BLACK, 12), new BoardPosition(BLACK, 18))
+		board.move(new BoardPosition(BLACK, 12), new BoardPosition(BLACK, 18))
+		board.move(new BoardPosition(BLACK, 12), new BoardPosition(BLACK, 18))
+		board.move(new BoardPosition(BLACK, 12), new BoardPosition(BLACK, 18))
+		board.move(new BoardPosition(BLACK, 12), new BoardPosition(BLACK, 18))
+		board.move(new BoardPosition(BLACK, 12), new BoardPosition(BLACK, 18))
+		board.move(new BoardPosition(BLACK, 12), new BoardPosition(BLACK, 18))
+		board.move(new BoardPosition(BLACK, 17), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 17), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 17), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 18), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 18), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 18), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 18), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 18), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 18), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 18), new BoardPosition(BLACK, 19))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		String expectedState = """\
+		   v  v  v  v  v  v     v  v  v  v  v  v
+		*--------------------*--------------------*
+		|  W              B  |                 W  |
+		|  W                 |                 W  |
+		|                    |                 W  |
+		|                    |                 W  |
+		|                    |                 W  |
+		|                    |                    |  W: 0
+		|                    |                    |  B: 0
+		|                 W  |                    |
+		|                 W  |                    |
+		|                 W  |     W              |
+		|                 W  |     W              |
+		|                 W  |     W              |
+		*--------------------*--------------------*
+		   ^  ^  ^  ^  ^  ^     ^  ^  ^  ^  ^  ^"""
+		when:
+		verifyState(expectedState, board)
+		board.move(new BoardPosition(BLACK, 19), new BearOffPosition(BLACK))
+		then:
+		thrown WinnerFoundException
+	}
+
 	private void verifyState(String state, Board board) {
-		state.stripIndent().eachLine { line ->
-			boolean found = false
-			board.toString().eachLine { boardLine ->
-				if (line.equals(boardLine)) found = true
-			}
-			if (!found) {
-				throw new AssertionError("Failed to find line: ${line}")
+		def boardArray = board.toString().split("\n")
+		def stateArray = state.stripIndent().split("\n")
+		for (int i = 0; i < stateArray.length; i++) {
+			if (!boardArray[i].equals(stateArray[i])) {
+				throw new AssertionError("Failed to find line: ${stateArray[i]}, was: ${boardArray[i]}")
 			}
 		}
 	}

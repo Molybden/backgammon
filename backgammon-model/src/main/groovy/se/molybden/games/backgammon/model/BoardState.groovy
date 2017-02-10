@@ -1,9 +1,6 @@
 package se.molybden.games.backgammon.model
 
-import se.molybden.games.backgammon.model.exceptions.HitException
-import se.molybden.games.backgammon.model.exceptions.IllegalMoveException
-import se.molybden.games.backgammon.model.exceptions.NoCheckersException
-import se.molybden.games.backgammon.model.exceptions.OccupiedByOtherColorException
+import se.molybden.games.backgammon.model.exceptions.*
 
 import static se.molybden.games.backgammon.model.BarPosition.getBarPosition
 import static se.molybden.games.backgammon.model.BoardPosition.getBoardPositionFromIndex
@@ -16,6 +13,7 @@ import static se.molybden.games.backgammon.model.Color.WHITE
 class BoardState implements Cloneable {
 	final Point[] points = new Point[24]
 	final Map<Color, Bar> bar = new HashMap<>(2)
+	private Color winner
 
 	BoardState() {
 		bar.put(WHITE, new Bar(WHITE))
@@ -107,6 +105,16 @@ class BoardState implements Cloneable {
 		} catch (HitException hit) {
 			checker = hit.checker
 			put(checker, getBarPosition(checker.color))
+		} finally {
+			checkWinner(checker.color)
+		}
+	}
+
+	def checkWinner(Color color) {
+		def remaining = points.findAll { !it.isEmpty() && it.color == color }
+		if (remaining.isEmpty() && bar.get(color).empty) {
+			winner = color
+			throw new WinnerFoundException(color)
 		}
 	}
 

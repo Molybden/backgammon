@@ -1,5 +1,7 @@
 package se.molybden.games.backgammon.model
 
+import se.molybden.games.backgammon.model.exceptions.IllegalMoveException
+
 import static se.molybden.games.backgammon.model.Color.BLACK
 import static se.molybden.games.backgammon.model.Color.WHITE
 
@@ -12,6 +14,7 @@ class Board {
 
 	Board() {
 		currentBoardState.initBoard()
+		confirmState()
 	}
 
 	List<Position> getAvailablePositions(Color color) {
@@ -28,7 +31,12 @@ class Board {
 	}
 
 	def move(Position from, Position to) {
+		try {
 		currentBoardState.move(from, to)
+		} catch (IllegalMoveException e) {
+			resetState()
+			throw e
+		}
 	}
 
 	/**
