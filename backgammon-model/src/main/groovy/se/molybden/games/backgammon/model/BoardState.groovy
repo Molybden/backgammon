@@ -162,4 +162,8 @@ class BoardState implements Cloneable {
 		}
 		return " "
 	}
+
+	boolean hasWinner() {
+		winner != null
+	}
 }

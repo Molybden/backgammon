@@ -59,4 +59,14 @@ class BoardPosition implements Position {
 		}
 		throw new NotImplementedException("Missing something here")
 	}
+
+	@Override
+	int getRelativePositionCount() {
+		return myCount
+	}
+
+	@Override
+	String toString() {
+		return "${myCount}"
+	}
 }

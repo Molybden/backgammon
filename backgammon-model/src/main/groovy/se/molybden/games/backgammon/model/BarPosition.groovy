@@ -33,8 +33,18 @@ class BarPosition implements Position {
 		}
 	}
 
+	@Override
+	int getRelativePositionCount() {
+		return 0
+	}
+
 	static BarPosition getBarPosition(Color color) {
 		if (color == BLACK) return BLACK_BAR
 		return WHITE_BAR
+	}
+
+	@Override
+	String toString() {
+		return "bar"
 	}
 }

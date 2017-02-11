@@ -7,4 +7,6 @@ interface Position {
 	Color getColor()
 
 	void checkDistance(Position to)
+
+	int getRelativePositionCount()
 }

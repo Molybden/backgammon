@@ -24,8 +24,18 @@ class BearOffPosition implements Position {
 		throw new IllegalMoveException("Not possible to move FROM Bearoff position")
 	}
 
+	@Override
+	int getRelativePositionCount() {
+		return 24
+	}
+
 	static BearOffPosition getBearOffPosition(Color color) {
 		if (color == BLACK) return BLACK_OUT
 		return WHITE_OUT
+	}
+
+	@Override
+	String toString() {
+		return "OFF"
 	}
 }

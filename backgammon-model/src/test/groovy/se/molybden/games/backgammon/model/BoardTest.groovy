@@ -337,6 +337,8 @@ class BoardTest extends Specification {
 		thrown WinnerFoundException
 	}
 
+	//TODO: test for moving backwards or to same position
+
 	private void verifyState(String state, Board board) {
 		def boardArray = board.toString().split("\n")
 		def stateArray = state.stripIndent().split("\n")
